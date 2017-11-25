@@ -1,6 +1,11 @@
 'use strict';
 
 //Раздел описания функций
+//Ф-я: вешает события на кнопки внутри списка squadList
+function bindEvents(squadItem){
+	const deletBtn = squadItem.querySelector('.control__delete');
+	deletBtn.addEventListener('click', deleteSquadItem);
+}
 //Ф-я: создаём DOM элемент
 function createElement(tag, props, ...children){
 	const elem = d.createElement(tag);
@@ -25,6 +30,7 @@ function createSquadItem(fullName, amplua){
 	const squadButton = createElement('a', {className: 'control__delete squad__link control__btn', href: ''}, 'Удалить');
 	const squadItem = createElement('li', {className: 'squad__item'}, squadfullName,squadAmplua, squadButton);
 
+	bindEvents(squadItem);
 	return squadItem;
 };
 //Ф-я: добавляем игрока в команду
@@ -37,8 +43,16 @@ function addSquadItem(e){
 	const amplua = selectAmplua.options[selectAmplua.value].textContent;
 	const squadItem = createSquadItem(addInput.value, amplua);
 	squadList.appendChild(squadItem);
+	addInput.value = '';
 };
 
+//
+function deleteSquadItem(e){
+	e.preventDefault();
+	const squadItem = this.parentNode;
+	squadList.removeChild(squadItem);
+
+}
 //Раздел описания переменных
 	const d =document,
 				form = d.getElementById('control'),
@@ -49,4 +63,5 @@ function addSquadItem(e){
 
 	
 //Развешиваем события
+squadItems.forEach(item=>bindEvents(item));
 form.addEventListener('submit', addSquadItem); 
